@@ -167,7 +167,7 @@ article.hover-card .card-overlay {
   right: 0;
   bottom: 0;
   /* A semi-transparent dark tint so the white text remains readable */
-  background: rgba(0, 0, 0, 0.4); 
+  background: rgba(255, 169, 228, 0.4); 
   /* The blur effect */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px); /* Safari support */
