@@ -12,6 +12,7 @@
 nbproject
 Thumbs.db
 /.vscode/
+.env
 
 # Numerous always-ignore extensions
 *.diff

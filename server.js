@@ -1,18 +1,39 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const app = express();
-const PORT = 3000;
+const db = require('./database'); 
 
-// 1. Serve all your static files (HTML, CSS, JS, Images) from the current directory
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
 app.use(express.static(__dirname));
 
-// 2. Catch-all route for 404 errors
-// Because this is at the bottom, it only triggers if no file was found in step 1
+// Route to get all items for the homepage
+app.get('/api/items', async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM items ORDER BY id ASC');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Route to get a single item by ID for the details page
+app.get('/api/items/:id', async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM items WHERE id = $1', [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Not found' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, '404.html'));
 });
 
-// 3. Start the server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
